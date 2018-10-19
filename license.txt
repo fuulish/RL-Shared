@@ -1,0 +1,3 @@
+Files in World-2DTiles/permissive-fov are supplied according to the terms in World-2DTiles/permissive-fov/LICENSE.txt (BSD license). 
+
+All other code in the Shared repository is CC0 (Public Domain) and is supplied without an implied warranty of any kind.
