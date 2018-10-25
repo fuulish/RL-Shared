@@ -37,7 +37,7 @@ public:
 	DBKeyValue avatar(void) const		{ return m_avatar_key; }
 	void setAvatar( DBKeyValue val )	{ m_avatar_key = val; }
 
-	//TODO: should perhaps move to ownership by player/character object
+	// TODO: should perhaps move to ownership by player/character object
 	VisionField& visionField(void)				{ return m_vision_field; }
 	const VisionField& visionField(void) const	{ return m_vision_field; }
 	virtual void updateVision(void);
@@ -49,12 +49,15 @@ public:
 	void updateHearingIfDirty(void);
 	virtual boost::uint32_t hearingValue( DBKeyValue zone_key, int zone_x, int zone_z ) const;
 
-	//TODO this makeshift reference counting system is ugly.
-	//The root problem is that the game model needs to know of the existence of a fast object 
-	//before it is actually created, in order not to step past that point. 
-	//The correct solution is probably for the model to observe creation and destruction of 
-	//both objects and actions, and to explicitly destroy any fast moving objects that are 
-	//not being updated (e.g. by being in an inactive Zone). The latter is already being done. 
+	// TODO this makeshift reference counting system is ugly.
+	// The root problem is that the game model needs to know of the existence of a fast object 
+	// before it is actually created, in order not to step past that point. 
+	// The correct solution is probably for the model to observe creation and destruction of 
+	// both objects and actions, and to explicitly destroy any fast moving objects that are 
+	// not being updated (e.g. by being in an inactive Zone). The latter is already being done. 
+	// FURTHER NOTE: this could possibly be resolved by a much simpler change in the ActionEngine; 
+	// to simply step only in the smallest appropriate increments. That would probably make the 
+	// ActionEngine code simpler and (I think) would remove the need for this reference counting system.
 	void incFastMovingObjects(void)	{ ++m_fast_moving_objects; }
 protected:
 	void decFastMovingObjects(void);
