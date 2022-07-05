@@ -1,5 +1,5 @@
 #include "UserMessageLog.hpp"
-#include "assert.hpp"
+#include "Include/assert.hpp"
 #include <boost/assert.hpp>
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>
