@@ -44,7 +44,7 @@ unsigned long isqrt(unsigned long x)
 //Based on implementation of Bresenham's line algorithm from wikipedia:
 //http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 //***** THE IMPLEMENTATION HAS SINCE BEEN REMOVED FROM THE WIKIPEDIA PAGE *****
-bool sample(bool swap, int x, int y, ISampleCellFunctor& sample)
+bool sample(bool swap, int x, int y, const ISampleCellFunctor& sample)
 {
 	if (swap)
 	{

@@ -57,7 +57,7 @@ public:
 		}
 	};
 	WorldLocation location(void) const			{ return m_loc; }
-	void setLocation(WorldLocation& new_loc)	{ m_loc = new_loc; }
+	void setLocation(WorldLocation new_loc)	{ m_loc = new_loc; }
 
 	//Uses virtual dispatch. Do not call from constructor.
 	bool moveTo(IGameModel&, WorldLocation new_loc, bool instant);
