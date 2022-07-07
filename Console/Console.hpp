@@ -6,6 +6,34 @@
 #include <utility>
 #include "Abstract/AOutputWindow.hpp"
 
+// XXX: if not windows:
+#include <curses.h>
+typedef struct  {
+	struct {
+		char UnicodeChar; // not to be used at this moment
+		char AsciiChar;
+	} Char;
+	chtype Attributes;
+} CHAR_INFO;
+
+typedef struct {
+	int X;
+	int Y;
+} COORD;
+
+typedef struct {
+	int Top;
+	int Bottom;
+	int Left;
+	int Right;
+} SMALL_RECT;
+
+typedef WINDOW * HANDLE;
+
+void WriteConsoleOutput(WINDOW *, CHAR_INFO *, COORD, COORD, SMALL_RECT&) ;
+void Sleep(int ms) ;
+
+#define  _getch()  wgetch(m_data->hFrontBuffer) // XXX: this is ugly AF
 
 namespace RL_shared
 {

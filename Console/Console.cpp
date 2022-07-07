@@ -4,11 +4,77 @@
 // #include <windows.h>
 // #include <conio.h>
 #include <curses.h>
+#include <cassert>
+#include <thread>
+#include <chrono>
 
 #include <stdio.h>
 
 
+// as substitute for the windows things
+void WriteConsoleOutput(HANDLE win, CHAR_INFO * chs, COORD size, COORD dest, SMALL_RECT* rect)
+{
+	for (int i=0; i<size.X; ++i) {
+		for (int j=0; j<size.Y; ++j) {
+			mvwaddch(win, j, i, chs[ j*size.Y + i ].Char.AsciiChar);
+			mvwchgat(win, j, i, 1, chs[ j*size.Y + i ].Attributes, 0, NULL); // XXX: still need to reset the color
+		}
+	}
+}
 
+void Sleep(int ms)
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+typedef struct {
+	int bla;
+	bool theTruth;
+} CONSOLE_CURSOR_INFO;
+
+bool SetConsoleCursorInfo(HANDLE win, CONSOLE_CURSOR_INFO *lpConsoleCursorInfo)
+{
+	noecho();
+	return true;
+}
+
+const int CONSOLE_SIZE_X = 80;
+const int CONSOLE_SIZE_Y = 40;
+
+
+bool SetConsoleScreenBufferSize(HANDLE win, COORD crd)
+{
+    getmaxyx(win, crd.Y, crd.X);
+    assert((crd.X >= CONSOLE_SIZE_X) && (crd.Y <= CONSOLE_SIZE_Y));
+    // XXX potentially  int wresize(WINDOW *win, int lines, int columns);  could help
+
+    return true;
+}
+
+typedef bool BOOL;
+bool SetConsoleWindowInfo(HANDLE win, BOOL absolute, SMALL_RECT *rect)
+{
+	return true;
+}
+
+bool SetConsoleActiveScreenBuffer(HANDLE win)
+{
+	return true;
+}
+
+typedef unsigned long DWORD;
+#define  GENERIC_READ   0
+#define  GENERIC_WRITE  1
+#define  CONSOLE_TEXTMODE_BUFFER  0
+
+// second arg should be a DWORD, not a pointer
+HANDLE CreateConsoleScreenBuffer(DWORD access, DWORD *shareMode, void *secAttr, DWORD dwFlags, void *bufferData)
+{
+	HANDLE win = initscr();
+	start_color();
+
+	return win;
+}
 
 namespace RL_shared
 {
@@ -76,8 +142,6 @@ int convertConsoleColour( Console::Colour foreground, Console::Colour background
 
 
 
-const int CONSOLE_SIZE_X = 80;
-const int CONSOLE_SIZE_Y = 40;
 
 
 
