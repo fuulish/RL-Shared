@@ -16,47 +16,56 @@ namespace RL_shared
 
 
 
-WORD convertConsoleColour( Console::Colour foreground, Console::Colour background )
+int convertConsoleColour( Console::Colour foreground, Console::Colour background )
 {
-    WORD colour = 0;
+    int colour = 0;
+
+    short fore, back;
+
+    // XXX: need to ensure that start_color was called
 
     switch (foreground)
     {
-        case Console::Red:              colour |= FOREGROUND_RED;                                                               break;
-        case Console::Green:            colour |= FOREGROUND_GREEN;                                                             break;
-        case Console::Blue:             colour |= FOREGROUND_BLUE;                                                              break;
-        case Console::Yellow:           colour |= FOREGROUND_RED | FOREGROUND_GREEN;                                            break;
-        case Console::Cyan:             colour |= FOREGROUND_GREEN | FOREGROUND_BLUE;                                           break;
-        case Console::Magenta:          colour |= FOREGROUND_RED | FOREGROUND_BLUE;                                             break;
-        case Console::Grey:             colour |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;                          break;
-        case Console::BrightRed:        colour |= FOREGROUND_INTENSITY | FOREGROUND_RED;                                        break;
-        case Console::BrightGreen:      colour |= FOREGROUND_INTENSITY | FOREGROUND_GREEN;                                      break;
-        case Console::BrightBlue:       colour |= FOREGROUND_INTENSITY | FOREGROUND_BLUE;                                       break;
-        case Console::BrightYellow:     colour |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN;                     break;
-        case Console::BrightCyan:       colour |= FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE;                    break;
-        case Console::BrightMagenta:    colour |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE;                      break;
-        case Console::White:            colour |= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;   break;
+        case Console::Red:              fore = COLOR_RED;     break;
+        case Console::Green:            fore = COLOR_GREEN;   break;
+        case Console::Blue:             fore = COLOR_BLUE;    break;
+        case Console::Yellow:           fore = COLOR_YELLOW;  break;
+        case Console::Cyan:             fore = COLOR_CYAN;    break;
+        case Console::Magenta:          fore = COLOR_MAGENTA; break;
+        case Console::Grey:             fore = COLOR_BLACK;   break; // should be bright black
+        case Console::BrightRed:        fore = COLOR_RED;     break; // need brightness/intensity attribute
+        case Console::BrightGreen:      fore = COLOR_GREEN;   break; // need brightness/intensity attribute
+        case Console::BrightBlue:       fore = COLOR_BLUE;    break; // need brightness/intensity attribute
+        case Console::BrightYellow:     fore = COLOR_YELLOW;  break; // need brightness/intensity attribute
+        case Console::BrightCyan:       fore = COLOR_CYAN;    break; // need brightness/intensity attribute
+        case Console::BrightMagenta:    fore = COLOR_MAGENTA; break; // need brightness/intensity attribute
+        case Console::White:            fore = COLOR_WHITE;   break; // need brightness/intensity attribute
         default:;
     };
 
     switch (background)
     {
-        case Console::Red:              colour |= BACKGROUND_RED;                                                               break;
-        case Console::Green:            colour |= BACKGROUND_GREEN;                                                             break;
-        case Console::Blue:             colour |= BACKGROUND_BLUE;                                                              break;
-        case Console::Yellow:           colour |= BACKGROUND_RED | BACKGROUND_GREEN;                                            break;
-        case Console::Cyan:             colour |= BACKGROUND_GREEN | BACKGROUND_BLUE;                                           break;
-        case Console::Magenta:          colour |= BACKGROUND_RED | BACKGROUND_BLUE;                                             break;
-        case Console::Grey:             colour |= BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;                          break;
-        case Console::BrightRed:        colour |= BACKGROUND_INTENSITY | BACKGROUND_RED;                                        break;
-        case Console::BrightGreen:      colour |= BACKGROUND_INTENSITY | BACKGROUND_GREEN;                                      break;
-        case Console::BrightBlue:       colour |= BACKGROUND_INTENSITY | BACKGROUND_BLUE;                                       break;
-        case Console::BrightYellow:     colour |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN;                     break;
-        case Console::BrightCyan:       colour |= BACKGROUND_INTENSITY | BACKGROUND_GREEN | BACKGROUND_BLUE;                    break;
-        case Console::BrightMagenta:    colour |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE;                      break;
-        case Console::White:            colour |= BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;   break;
+        case Console::Red:              back = COLOR_RED;     break;
+        case Console::Green:            back = COLOR_GREEN;   break;
+        case Console::Blue:             back = COLOR_BLUE;    break;
+        case Console::Yellow:           back = COLOR_YELLOW;  break;
+        case Console::Cyan:             back = COLOR_CYAN;    break;
+        case Console::Magenta:          back = COLOR_MAGENTA; break;
+        case Console::Grey:             back = COLOR_BLACK;   break; // should be bright black
+        case Console::BrightRed:        back = COLOR_RED;     break; // need brightness/intensity attribute
+        case Console::BrightGreen:      back = COLOR_GREEN;   break; // need brightness/intensity attribute
+        case Console::BrightBlue:       back = COLOR_BLUE;    break; // need brightness/intensity attribute
+        case Console::BrightYellow:     back = COLOR_YELLOW;  break; // need brightness/intensity attribute
+        case Console::BrightCyan:       back = COLOR_CYAN;    break; // need brightness/intensity attribute
+        case Console::BrightMagenta:    back = COLOR_MAGENTA; break; // need brightness/intensity attribute
+        case Console::White:            back = COLOR_WHITE;   break; // need brightness/intensity attribute
         default:;
     };
+
+    colour = fore | back;
+
+    if (OK != (init_pair(colour, fore, back)))
+	    return 0; // XXX: double-check that this makes sense/works
 
     return colour;
 }
