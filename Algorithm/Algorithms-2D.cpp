@@ -52,7 +52,7 @@ bool sample(bool swap, int x, int y, const ISampleCellFunctor& sample)
 	}
 	return sample(x, y);
 }
-void visit(bool swap, int x, int y, VisitCellFunctor& visit)
+void visit(bool swap, int x, int y, const VisitCellFunctor& visit)
 {
 	if (swap)
 		visit(y, x);
@@ -61,8 +61,8 @@ void visit(bool swap, int x, int y, VisitCellFunctor& visit)
 }
 void lineCast(
 	int x0, int y0, int x1, int y1, 
-	ISampleCellFunctor& sample_cell_functor, 
-	VisitCellFunctor& visit_cell_functor
+	const ISampleCellFunctor& sample_cell_functor,
+	const VisitCellFunctor& visit_cell_functor
 	)
 {
    int Dx = x1 - x0; 

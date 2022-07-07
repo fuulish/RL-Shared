@@ -30,7 +30,7 @@ public:
 	{
 	}
 	//Returns true to stop the line cast, false otherwise. 
-	virtual bool operator()(int x, int y) = 0;
+	virtual bool operator()(int x, int y) const = 0;
 };
 
 class VisitCellFunctor
@@ -39,7 +39,7 @@ public:
 	virtual ~VisitCellFunctor()
 	{
 	}
-	virtual void operator()(int x, int y) 
+	virtual void operator()(int x, int y)  const
 	{
 	}
 };
@@ -48,7 +48,7 @@ public:
 void lineCast(
 	int x0, int y0, int x1, int y1, 
 	const ISampleCellFunctor& sample_cell_functor,
-	VisitCellFunctor& visit_cell_functor
+	const VisitCellFunctor& visit_cell_functor
 	);
 
 
