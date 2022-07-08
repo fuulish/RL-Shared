@@ -45,7 +45,7 @@ const int CONSOLE_SIZE_Y = 40;
 bool SetConsoleScreenBufferSize(HANDLE win, COORD crd)
 {
     getmaxyx(win, crd.Y, crd.X);
-    assert((crd.X >= CONSOLE_SIZE_X) && (crd.Y <= CONSOLE_SIZE_Y));
+    assert((crd.X >= CONSOLE_SIZE_X) && (crd.Y >= CONSOLE_SIZE_Y));
     // XXX potentially  int wresize(WINDOW *win, int lines, int columns);  could help
 
     return true;
