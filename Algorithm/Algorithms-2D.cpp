@@ -44,7 +44,7 @@ unsigned long isqrt(unsigned long x)
 //Based on implementation of Bresenham's line algorithm from wikipedia:
 //http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 //***** THE IMPLEMENTATION HAS SINCE BEEN REMOVED FROM THE WIKIPEDIA PAGE *****
-bool sample(bool swap, int x, int y, const ISampleCellFunctor& sample)
+bool sample(bool swap, int x, int y, ISampleCellFunctor& sample)
 {
 	if (swap)
 	{
@@ -52,7 +52,7 @@ bool sample(bool swap, int x, int y, const ISampleCellFunctor& sample)
 	}
 	return sample(x, y);
 }
-void visit(bool swap, int x, int y, const VisitCellFunctor& visit)
+void visit(bool swap, int x, int y, VisitCellFunctor& visit)
 {
 	if (swap)
 		visit(y, x);
@@ -61,8 +61,8 @@ void visit(bool swap, int x, int y, const VisitCellFunctor& visit)
 }
 void lineCast(
 	int x0, int y0, int x1, int y1, 
-	const ISampleCellFunctor& sample_cell_functor,
-	const VisitCellFunctor& visit_cell_functor
+	ISampleCellFunctor& sample_cell_functor,
+	VisitCellFunctor& visit_cell_functor
 	)
 {
    int Dx = x1 - x0; 
