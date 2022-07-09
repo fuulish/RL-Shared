@@ -28,10 +28,10 @@ public:
 	{
 	}
 
-	class NoObjectWithKey : std::exception
+	class NoObjectWithKey : std::runtime_error
 	{
-	public: 
-		NoObjectWithKey(DBKeyValue key) : std::exception( (std::string("No object with key ") + key.asString()).c_str() ) {
+	public:
+		NoObjectWithKey(DBKeyValue key) : std::runtime_error( (std::string("No object with key ") + key.asString()).c_str() ) {
 		}
 	};
 
