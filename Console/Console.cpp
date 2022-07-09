@@ -16,8 +16,8 @@ void WriteConsoleOutput(HANDLE win, CHAR_INFO * chs, COORD size, COORD dest, SMA
 {
 	for (int i=0; i<size.X; ++i) {
 		for (int j=0; j<size.Y; ++j) {
-			mvwaddch(win, j, i, chs[ j*size.Y + i ].Char.AsciiChar);
-			mvwchgat(win, j, i, 1, chs[ j*size.Y + i ].Attributes, 0, NULL); // XXX: still need to reset the color
+			mvwaddch(win, j, i,    chs[ j*size.X + i ].Char.AsciiChar);
+			mvwchgat(win, j, i, 1, chs[ j*size.X + i ].Attributes, 0, NULL); // XXX: still need to reset the color
 		}
 	}
 }
