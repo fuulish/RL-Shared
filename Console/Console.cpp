@@ -8,7 +8,7 @@
 #include <thread>
 #include <chrono>
 
-#include <stdio.h>
+#include <cstring>
 
 
 // as substitute for the windows things
