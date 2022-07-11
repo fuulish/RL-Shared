@@ -6,7 +6,7 @@
 #include <utility>
 #include "Abstract/AOutputWindow.hpp"
 
-// XXX: if not windows:
+#if defined(unix) || defined(__unix__) || defined(__unix)
 #include <curses.h>
 typedef struct  {
 	struct {
@@ -33,7 +33,9 @@ typedef WINDOW * HANDLE;
 void WriteConsoleOutput(WINDOW *, CHAR_INFO *, COORD, COORD, SMALL_RECT&) ;
 void Sleep(int ms) ;
 
-#define  _getch()  wgetch(m_data->hFrontBuffer) // XXX: this is ugly AF
+#define  _getch()  wgetch(m_data->hFrontBuffer)
+#endif
+
 
 namespace RL_shared
 {

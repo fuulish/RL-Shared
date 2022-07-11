@@ -1,9 +1,12 @@
 #include "Console.hpp"
 
+#if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
-// #include <windows.h>
-// #include <conio.h>
+#include <windows.h>
+#include <conio.h>
+#elif defined(unix) || defined(__unix__) || defined(__unix)
 #include <curses.h>
+#endif
 #include <cassert>
 #include <thread>
 #include <chrono>
@@ -34,10 +37,12 @@ typedef struct {
 
 bool SetConsoleCursorInfo(HANDLE win, CONSOLE_CURSOR_INFO *lpConsoleCursorInfo)
 {
+#if defined(unix) || defined(__unix__) || defined(__unix)
 	noecho();
 	cbreak();
 	curs_set(0);
 	nodelay(win, FALSE);
+#endif
 	return true;
 }
 
@@ -271,6 +276,7 @@ KeyCode Console::readKey(void)
 	bool escaped( false );
 
 	char ch = _getch();
+#if defined(_WIN32)
 	if (0 == ch)
 	{
 		escaped = true;
@@ -279,6 +285,7 @@ KeyCode Console::readKey(void)
 	else {
 		_getch();
 	}
+#endif
 
     return KeyCode( ch, escaped ); 
 }
