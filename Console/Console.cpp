@@ -37,7 +37,7 @@ bool SetConsoleCursorInfo(HANDLE win, CONSOLE_CURSOR_INFO *lpConsoleCursorInfo)
 	noecho();
 	cbreak();
 	curs_set(0);
-	nodelay(win, TRUE);
+	nodelay(win, FALSE);
 	return true;
 }
 
