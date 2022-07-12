@@ -86,6 +86,7 @@ typedef unsigned long DWORD;
 HANDLE CreateConsoleScreenBuffer(DWORD access, DWORD *shareMode, void *secAttr, DWORD dwFlags, void *bufferData)
 {
 	HANDLE win = initscr();
+	assert(has_colors() && can_change_color());
 	start_color();
 
 	return win;
