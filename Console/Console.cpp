@@ -20,7 +20,14 @@ void WriteConsoleOutput(HANDLE win, CHAR_INFO * chs, COORD size, COORD dest, SMA
 	for (int i=0; i<size.X; ++i) {
 		for (int j=0; j<size.Y; ++j) {
 			mvwaddch(win, j, i,    chs[ j*size.X + i ].Char.AsciiChar);
-			mvwchgat(win, j, i, 1, chs[ j*size.X + i ].Attributes, 0, NULL); // XXX: still need to reset the color
+			attr_t attr = 0;
+			if (8 & chs[ j*size.X + i ].Attributes)
+				attr |= A_BOLD;
+
+			if (128 & chs[ j*size.X + i ].Attributes)
+				attr |= A_BLINK; // XXX or use something else
+
+			mvwchgat(win, j, i, 1, attr, chs[ j*size.X + i ].Attributes, NULL); // XXX: still need to reset the color
 		}
 	}
 }
@@ -92,9 +99,9 @@ namespace RL_shared
 
 int convertConsoleColour( Console::Colour foreground, Console::Colour background )
 {
-    int colour = 0;
+    int colour = 1 << 8;
 
-    short fore, back;
+    short fore = 0, back = 0;
 
     // XXX: need to ensure that start_color was called
 
@@ -107,13 +114,13 @@ int convertConsoleColour( Console::Colour foreground, Console::Colour background
         case Console::Cyan:             fore = COLOR_CYAN;    break;
         case Console::Magenta:          fore = COLOR_MAGENTA; break;
         case Console::Grey:             fore = COLOR_BLACK;   break; // should be bright black
-        case Console::BrightRed:        fore = COLOR_RED;     break; // need brightness/intensity attribute
-        case Console::BrightGreen:      fore = COLOR_GREEN;   break; // need brightness/intensity attribute
-        case Console::BrightBlue:       fore = COLOR_BLUE;    break; // need brightness/intensity attribute
-        case Console::BrightYellow:     fore = COLOR_YELLOW;  break; // need brightness/intensity attribute
-        case Console::BrightCyan:       fore = COLOR_CYAN;    break; // need brightness/intensity attribute
-        case Console::BrightMagenta:    fore = COLOR_MAGENTA; break; // need brightness/intensity attribute
-        case Console::White:            fore = COLOR_WHITE;   break; // need brightness/intensity attribute
+        case Console::BrightRed:        fore = 8 | COLOR_RED;     break; // need brightness/intensity attribute
+        case Console::BrightGreen:      fore = 8 | COLOR_GREEN;   break; // need brightness/intensity attribute
+        case Console::BrightBlue:       fore = 8 | COLOR_BLUE;    break; // need brightness/intensity attribute
+        case Console::BrightYellow:     fore = 8 | COLOR_YELLOW;  break; // need brightness/intensity attribute
+        case Console::BrightCyan:       fore = 8 | COLOR_CYAN;    break; // need brightness/intensity attribute
+        case Console::BrightMagenta:    fore = 8 | COLOR_MAGENTA; break; // need brightness/intensity attribute
+        case Console::White:            fore = 8 | COLOR_WHITE;   break; // need brightness/intensity attribute
         default:;
     };
 
@@ -126,20 +133,23 @@ int convertConsoleColour( Console::Colour foreground, Console::Colour background
         case Console::Cyan:             back = COLOR_CYAN;    break;
         case Console::Magenta:          back = COLOR_MAGENTA; break;
         case Console::Grey:             back = COLOR_BLACK;   break; // should be bright black
-        case Console::BrightRed:        back = COLOR_RED;     break; // need brightness/intensity attribute
-        case Console::BrightGreen:      back = COLOR_GREEN;   break; // need brightness/intensity attribute
-        case Console::BrightBlue:       back = COLOR_BLUE;    break; // need brightness/intensity attribute
-        case Console::BrightYellow:     back = COLOR_YELLOW;  break; // need brightness/intensity attribute
-        case Console::BrightCyan:       back = COLOR_CYAN;    break; // need brightness/intensity attribute
-        case Console::BrightMagenta:    back = COLOR_MAGENTA; break; // need brightness/intensity attribute
-        case Console::White:            back = COLOR_WHITE;   break; // need brightness/intensity attribute
+        case Console::BrightRed:        back = 8 | COLOR_RED;     break; // need brightness/intensity attribute
+        case Console::BrightGreen:      back = 8 | COLOR_GREEN;   break; // need brightness/intensity attribute
+        case Console::BrightBlue:       back = 8 | COLOR_BLUE;    break; // need brightness/intensity attribute
+        case Console::BrightYellow:     back = 8 | COLOR_YELLOW;  break; // need brightness/intensity attribute
+        case Console::BrightCyan:       back = 8 | COLOR_CYAN;    break; // need brightness/intensity attribute
+        case Console::BrightMagenta:    back = 8 | COLOR_MAGENTA; break; // need brightness/intensity attribute
+        case Console::White:            back = 8 | COLOR_WHITE;   break; // need brightness/intensity attribute
         default:;
     };
 
-    colour = fore | back;
+    int bbbb, ffff;
 
-    if (OK != (init_pair(colour, fore, back)))
-	    return 0; // XXX: double-check that this makes sense/works
+    bbbb = (15 & back) << 4;
+    ffff = 15 & fore;
+    colour |= bbbb | ffff;
+
+    assert(OK == (init_pair(colour, 7 & fore, 7 & back)));
 
     return colour;
 }
@@ -231,6 +241,7 @@ void Console::draw(int nX, int nY, char chr, Colour fore, Colour back)
 	write.Char.UnicodeChar = 0;
 	write.Char.AsciiChar = chr;
 	write.Attributes = convertConsoleColour( fore, back );
+	assert(write.Attributes != -1);
 
 	m_data->back_buffer[(nY*CONSOLE_SIZE_X)+nX] = write;
 }
