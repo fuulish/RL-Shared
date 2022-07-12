@@ -85,9 +85,13 @@ typedef unsigned long DWORD;
 // second arg should be a DWORD, not a pointer
 HANDLE CreateConsoleScreenBuffer(DWORD access, DWORD *shareMode, void *secAttr, DWORD dwFlags, void *bufferData)
 {
-	HANDLE win = initscr();
+	initscr();
 	assert(has_colors() && can_change_color());
 	start_color();
+	HANDLE win = newwin(CONSOLE_SIZE_Y, CONSOLE_SIZE_X, 0, 0);
+	keypad(win, TRUE);
+
+	wrefresh(win);
 
 	return win;
 }
