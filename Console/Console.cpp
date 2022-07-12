@@ -277,6 +277,8 @@ void Console::updateScreen(void)
         &rect
         );
 
+	wrefresh(m_data->hFrontBuffer);
+
 	//Sleep(50);
 }
 void Console::sleep(int ms)
