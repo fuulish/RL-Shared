@@ -20,14 +20,10 @@ void WriteConsoleOutput(HANDLE win, CHAR_INFO * chs, COORD size, COORD dest, SMA
 	for (int i=0; i<size.X; ++i) {
 		for (int j=0; j<size.Y; ++j) {
 			mvwaddch(win, j, i,    chs[ j*size.X + i ].Char.AsciiChar);
-			attr_t attr = 0;
-			if (8 & chs[ j*size.X + i ].Attributes)
-				attr |= A_BOLD;
-
-			if (128 & chs[ j*size.X + i ].Attributes)
-				attr |= A_BLINK; // XXX or use something else
-
-			mvwchgat(win, j, i, 1, attr, chs[ j*size.X + i ].Attributes, NULL); // XXX: still need to reset the color
+			// XXX: works, but for the wrong reasons, FIX IT
+			attr_t attr = chs[ j*size.X + i ].Attributes & A_ATTRIBUTES;
+			chtype colr = chs[ j*size.X + i ].Attributes & ~A_ATTRIBUTES;
+			mvwchgat(win, j, i, 1, attr, colr, NULL);
 		}
 	}
 }
@@ -104,7 +100,7 @@ namespace RL_shared
 
 int convertConsoleColour( Console::Colour foreground, Console::Colour background )
 {
-    int colour = 1 << 8;
+    int colour = 1 << 6;
 
     short fore = 0, back = 0;
 
@@ -148,13 +144,18 @@ int convertConsoleColour( Console::Colour foreground, Console::Colour background
         default:;
     };
 
-    int bbbb, ffff;
+    int bbb, fff;
 
-    bbbb = (15 & back) << 4;
-    ffff = 15 & fore;
-    colour |= bbbb | ffff;
+    bbb = (7 & back) << 3;
+    fff = 7 & fore;
+    colour |= bbb | fff;
 
     assert(OK == (init_pair(colour, 7 & fore, 7 & back)));
+
+    if (8 & fore)
+	    colour |= A_BOLD;
+    if (8 & back)
+	    colour |= A_BLINK;
 
     return colour;
 }
