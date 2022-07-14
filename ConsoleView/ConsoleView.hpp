@@ -21,6 +21,7 @@ public:
 	ConsoleView( IGameModel&, InterfaceStateMachine& );
 
     void run(void);
+    void cleanup(void);
 
 private:
 

@@ -24,6 +24,7 @@ class ConsoleViewImpl
 public:
 
     ConsoleViewImpl( IGameModel&, InterfaceStateMachine& ui );
+    void cleanup(void);
 
     void run(void);
 
@@ -48,6 +49,11 @@ ConsoleViewImpl::ConsoleViewImpl( IGameModel& model, InterfaceStateMachine& ui )
 : m_model( model )
 , m_ui( ui )
 {
+}
+
+void ConsoleViewImpl::cleanup(void)
+{
+	m_console_window.cleanup();
 }
 
 

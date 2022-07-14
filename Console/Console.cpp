@@ -236,6 +236,13 @@ void Console::clearScreen(void)
 {
 	memset(m_data->back_buffer, 0, sizeof(CHAR_INFO)*CONSOLE_SIZE_X*CONSOLE_SIZE_Y);
 }
+
+void Console::cleanup(void)
+{
+#if defined(unix) || defined(__unix__) || defined(__unix)
+	endwin();
+#endif
+}
 void Console::draw(int nX, int nY, char chr, Colour fore, Colour back)
 {
     if((nX < 0) || (nX >= CONSOLE_SIZE_X))

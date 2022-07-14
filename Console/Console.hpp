@@ -72,6 +72,7 @@ public:
     Console(void);
 
     void clearScreen(void);
+    void cleanup(void);
     void draw(int nX, int nY, char chr, Colour forecol, Colour backcol = Black);
     void drawText(int nX, int nY, const char* text, Colour forecol, Colour backcol = Black);
     void updateScreen(void);
