@@ -3,6 +3,7 @@
 #include "Console/Console.hpp"
 #include "Interface/InterfaceStateMachine.hpp"
 #include "Abstract/IGameModel.hpp"
+#include "Include/system.hpp"
 #include <boost/shared_ptr.hpp>
 #include <ctime>
 
@@ -59,7 +60,7 @@ void ConsoleViewImpl::run(void)
 	//artificial delay to control maximum "play rate".
 	const std::clock_t frame_time( FRAME_TIME );
 
-#if defined(_WIN32)
+#if defined(IS_WINDOWS)
 	std::clock_t frame_end( std::clock() );
 #endif
 
@@ -69,7 +70,7 @@ void ConsoleViewImpl::run(void)
 
 		try
 		{
-#if defined(_WIN32)
+#if defined(IS_WINDOWS)
 			std::clock_t sleep_time(frame_end - std::clock());
 			if ((sleep_time > 0) && (sleep_time < frame_time))
 				m_console_window.sleep( sleep_time );

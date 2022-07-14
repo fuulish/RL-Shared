@@ -3,10 +3,11 @@
 #include <fstream>
 #include <algorithm>
 #include <exception>
-#if defined(unix) || defined(__unix__) || defined(__unix)
+#include "Include/system.hpp"
+#if defined(IS_UNIX)
 #include <curses.h>
 #define KEY_ENTER 10
-#elif defined(_WIN32)
+#elif defined(IS_WINDOWS)
 #define KEY_UP    72
 #define KEY_DOWN  80
 #define KEY_LEFT  75

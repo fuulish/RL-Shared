@@ -6,7 +6,8 @@
 #include <utility>
 #include "Abstract/AOutputWindow.hpp"
 
-#if defined(unix) || defined(__unix__) || defined(__unix)
+#include "Include/system.hpp"
+#if defined(IS_UNIX)
 #include <curses.h>
 typedef struct  {
 	struct {

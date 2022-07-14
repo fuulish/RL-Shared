@@ -1,10 +1,11 @@
 #include "Console.hpp"
+#include "Include/system.hpp"
 
-#if defined(_WIN32)
+#if defined(IS_WINDOWS)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <conio.h>
-#elif defined(unix) || defined(__unix__) || defined(__unix)
+#elif defined(IS_UNIX)
 #include <curses.h>
 #endif
 #include <cassert>
@@ -40,7 +41,7 @@ typedef struct {
 
 bool SetConsoleCursorInfo(HANDLE win, CONSOLE_CURSOR_INFO *lpConsoleCursorInfo)
 {
-#if defined(unix) || defined(__unix__) || defined(__unix)
+#if defined(IS_UNIX)
 	noecho();
 	cbreak();
 	curs_set(0);
@@ -239,7 +240,7 @@ void Console::clearScreen(void)
 
 void Console::cleanup(void)
 {
-#if defined(unix) || defined(__unix__) || defined(__unix)
+#if defined(IS_UNIX)
 	endwin();
 #endif
 }
