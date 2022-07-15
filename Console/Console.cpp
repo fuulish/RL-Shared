@@ -1,5 +1,6 @@
 #include "Console.hpp"
 #include "Include/system.hpp"
+#include <chrono>
 
 #if defined(IS_WINDOWS)
 #define WIN32_LEAN_AND_MEAN
@@ -185,6 +186,10 @@ void Console::updateScreen(void)
         );
 
 	//Sleep(50);
+}
+void Sleep(int ms)
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
 void Console::sleep(int ms)
 {
