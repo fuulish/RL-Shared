@@ -1,6 +1,6 @@
 #include "ActionEngine.hpp"
 #include "WorldObjects/Actor.hpp"
-#include "assert.hpp"
+#include "Include/assert.hpp"
 #include <boost/foreach.hpp>
 
 

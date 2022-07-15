@@ -2,6 +2,8 @@
 #define RL_SHARED_ACTOR_HPP
 
 
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/base_object.hpp>
 #include "WorldObject.hpp"
 #include "ActionEngine/ActionEngine.hpp"
 #include <vector>

@@ -2,7 +2,7 @@
 #include "GameObject.hpp"
 #include "WorldObjects/Actor.hpp"
 #include "World-2DTiles/Zone.hpp"
-#include "assert.hpp"
+#include "Include/assert.hpp"
 #include <boost/foreach.hpp>
 #include <utility>
 

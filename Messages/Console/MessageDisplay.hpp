@@ -5,7 +5,7 @@
 #include "Messages/UserMessageLog.hpp"
 #include "Messages/UserMessageWindow.hpp"
 #include "Console/Console.hpp"
-#include "assert.hpp"
+#include "Include/assert.hpp"
 
 
 namespace RL_shared

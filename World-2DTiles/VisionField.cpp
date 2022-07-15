@@ -1,7 +1,7 @@
 #include "VisionField.hpp"
 #include "World.hpp"
 #include "Zone.hpp"
-#include "assert.hpp"
+#include "Include/assert.hpp"
 #include "permissive-fov/permissive-fov-cpp.h"
 #include <boost/foreach.hpp>
 

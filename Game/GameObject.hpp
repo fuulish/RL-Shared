@@ -5,6 +5,7 @@
 #include "WorldObjects/Actor.hpp"
 #include "WorldObjects/Types.hpp"
 
+#include "World-2DTiles/World.hpp"
 
 namespace RL_shared
 {
