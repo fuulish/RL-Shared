@@ -122,7 +122,8 @@ bool Zone::putObject(World& world, DBKeyValue obj_key, int x, int z)
 		world.zone(source_loc.zone).takeObject(world, obj_key, source_loc.x, source_loc.z);
 	}
 	objects.push_back( obj_key );
-	obj.setLocation( WorldObject::WorldLocation(m_key, x, z) );
+	WorldObject::WorldLocation loc_world(m_key, x, z);
+	obj.setLocation( loc_world );
 	return true;
 }
 bool Zone::takeObject(World& world, DBKeyValue obj_key, int x, int z)
@@ -141,8 +142,10 @@ bool Zone::takeObject(World& world, DBKeyValue obj_key, int x, int z)
 			WorldObject& obj( world.object( obj_key ) );
 			WorldObject::WorldLocation loc = obj.location();
 
-			if ((loc.zone == m_key) && (loc.x == x) && (loc.z == z))
-				obj.setLocation(WorldObject::WorldLocation());
+			if ((loc.zone == m_key) && (loc.x == x) && (loc.z == z)) {
+				WorldObject::WorldLocation loc_world;
+				obj.setLocation(loc_world);
+			}
 		}
 
 		finder = std::find( objects.begin(), objects.end(), obj_key );
