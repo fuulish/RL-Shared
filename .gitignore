@@ -1,2 +1,5 @@
 # ignore any folder called "graveyard"
 graveyard/
+
+*.d
+*.o
