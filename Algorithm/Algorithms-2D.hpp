@@ -39,7 +39,7 @@ public:
 	virtual ~VisitCellFunctor()
 	{
 	}
-	virtual void operator()(int x, int y) 
+	virtual void operator()(int x, int y)
 	{
 	}
 };
@@ -47,7 +47,7 @@ public:
 //Bresenham line cast.
 void lineCast(
 	int x0, int y0, int x1, int y1, 
-	ISampleCellFunctor& sample_cell_functor, 
+	ISampleCellFunctor& sample_cell_functor,
 	VisitCellFunctor& visit_cell_functor
 	);
 

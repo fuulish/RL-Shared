@@ -61,7 +61,7 @@ void visit(bool swap, int x, int y, VisitCellFunctor& visit)
 }
 void lineCast(
 	int x0, int y0, int x1, int y1, 
-	ISampleCellFunctor& sample_cell_functor, 
+	ISampleCellFunctor& sample_cell_functor,
 	VisitCellFunctor& visit_cell_functor
 	)
 {
