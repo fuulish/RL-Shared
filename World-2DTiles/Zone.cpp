@@ -71,16 +71,16 @@ void Zone::recordTerrain(int x, int z)
 	if (!within(x,z))
 		return;
 
-	Location& at( at(x,z) );
-	at.recorded_terrain = at.terrain;
+	Location& a_space = at(x,z);
+	a_space.recorded_terrain = a_space.terrain;
 }
 void Zone::recordTerrain(int x, int z, TerrainType value)
 {
 	if (!within(x,z))
 		return;
 
-	Location& at( at(x,z) );
-	at.recorded_terrain = value;
+	Location& a_space = at(x,z);
+	a_space.recorded_terrain = value;
 }
 void Zone::recordObject(WorldObjectType type, int x, int z)
 {
