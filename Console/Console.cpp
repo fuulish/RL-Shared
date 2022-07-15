@@ -1,8 +1,11 @@
 #include "Console.hpp"
+#include "Include/system.hpp"
 
+#if defined(IS_WINDOWS)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <conio.h>
+endif
 
 
 
@@ -192,6 +195,7 @@ KeyCode Console::readKey(void)
 	bool escaped( false );
 
 	char ch = _getch();
+#if defined(_WIN32)
 	if (0 == ch)
 	{
 		escaped = true;
@@ -200,6 +204,7 @@ KeyCode Console::readKey(void)
 	else {
 		_getch();
 	}
+#endif
 
     return KeyCode( ch, escaped ); 
 }
