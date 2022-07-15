@@ -27,6 +27,7 @@ public:
     ConsoleViewImpl( IGameModel&, InterfaceStateMachine& ui );
 
     void run(void);
+    void cleanup(void);
 
 private:
 
@@ -158,6 +159,12 @@ void ConsoleViewImpl::run(void)
 }
 
 
+void ConsoleViewImpl::cleanup(void)
+{
+	m_console_window.cleanup();
+}
+
+
 
 
 ConsoleView::ConsoleView( IGameModel& model, InterfaceStateMachine& ui )
@@ -170,6 +177,10 @@ void ConsoleView::run(void)
 	m_impl->run();
 }
 
+void ConsoleView::cleanup(void)
+{
+	m_impl->cleanup();
+}
 
 
 }

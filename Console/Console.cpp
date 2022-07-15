@@ -6,10 +6,85 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <conio.h>
-endif
+#elif defined(IS_UNIX)
+#include <curses.h>
+#endif
+#include <cassert>
+#include <thread>
+
+#include <cstring>
 
 
+#if defined(IS_UNIX)
+void WriteConsoleOutput(HANDLE win, CHAR_INFO * chs, COORD size, COORD dest, SMALL_RECT* rect)
+{
+	for (int i=0; i<size.X; ++i) {
+		for (int j=0; j<size.Y; ++j) {
+			mvwaddch(win, j, i,    chs[ j*size.X + i ].Char.AsciiChar);
+			// XXX: works, but for the wrong reasons, FIX IT
+			attr_t attr = chs[ j*size.X + i ].Attributes & A_ATTRIBUTES;
+			chtype colr = (chs[ j*size.X + i ].Attributes & A_COLOR) >> NCURSES_ATTR_SHIFT;
+			mvwchgat(win, j, i, 1, attr, colr, NULL);
+		}
+	}
+}
 
+typedef struct {
+	int dwSize;
+	bool bVisible;
+} CONSOLE_CURSOR_INFO;
+
+bool SetConsoleCursorInfo(HANDLE win, CONSOLE_CURSOR_INFO *lpConsoleCursorInfo)
+{
+	noecho();
+	cbreak();
+	curs_set(0);
+	nodelay(win, FALSE);
+	return true;
+}
+
+const int CONSOLE_SIZE_X = 80;
+const int CONSOLE_SIZE_Y = 40;
+
+
+bool SetConsoleScreenBufferSize(HANDLE win, COORD crd)
+{
+    getmaxyx(win, crd.Y, crd.X);
+    assert((crd.X >= CONSOLE_SIZE_X) && (crd.Y >= CONSOLE_SIZE_Y));
+
+    return true;
+}
+
+typedef bool BOOL;
+bool SetConsoleWindowInfo(HANDLE win, BOOL absolute, SMALL_RECT *rect)
+{
+	return true;
+}
+
+bool SetConsoleActiveScreenBuffer(HANDLE win)
+{
+	return true;
+}
+
+typedef unsigned long DWORD;
+#define  GENERIC_READ   0
+#define  GENERIC_WRITE  1
+#define  CONSOLE_TEXTMODE_BUFFER  0
+
+// second arg should be a DWORD, not a pointer
+HANDLE CreateConsoleScreenBuffer(DWORD access, DWORD *shareMode, void *secAttr, DWORD dwFlags, void *bufferData)
+{
+	initscr();
+	assert(has_colors() && can_change_color());
+	start_color();
+	HANDLE win = newwin(CONSOLE_SIZE_Y, CONSOLE_SIZE_X, 0, 0);
+	keypad(win, TRUE);
+
+	wrefresh(win);
+
+	return win;
+}
+#endif
 
 namespace RL_shared
 {
@@ -17,6 +92,7 @@ namespace RL_shared
 
 
 
+#if defined(IS_WINDOWS)
 WORD convertConsoleColour( Console::Colour foreground, Console::Colour background )
 {
     WORD colour = 0;
@@ -61,6 +137,72 @@ WORD convertConsoleColour( Console::Colour foreground, Console::Colour backgroun
 
     return colour;
 }
+#elif defined(IS_UNIX)
+int convertConsoleColour( Console::Colour foreground, Console::Colour background )
+{
+    int color_len = 3,
+           colour = 1 << (2 * color_len), // avoid re-mapping default terminal colour
+        is_bright = 1 << color_len,
+       color_mask = (1 << color_len) - 1;
+
+    short fore = 0, back = 0;
+
+    switch (foreground)
+    {
+        case Console::Red:              fore = COLOR_RED;                 break;
+        case Console::Green:            fore = COLOR_GREEN;               break;
+        case Console::Blue:             fore = COLOR_BLUE;                break;
+        case Console::Yellow:           fore = COLOR_YELLOW;              break;
+        case Console::Cyan:             fore = COLOR_CYAN;                break;
+        case Console::Magenta:          fore = COLOR_MAGENTA;             break;
+        case Console::Grey:             fore = COLOR_BLACK;               break;
+        case Console::BrightRed:        fore = is_bright | COLOR_RED;     break;
+        case Console::BrightGreen:      fore = is_bright | COLOR_GREEN;   break;
+        case Console::BrightBlue:       fore = is_bright | COLOR_BLUE;    break;
+        case Console::BrightYellow:     fore = is_bright | COLOR_YELLOW;  break;
+        case Console::BrightCyan:       fore = is_bright | COLOR_CYAN;    break;
+        case Console::BrightMagenta:    fore = is_bright | COLOR_MAGENTA; break;
+        case Console::White:            fore = is_bright | COLOR_WHITE;   break;
+        default:;
+    };
+
+    switch (background)
+    {
+        case Console::Red:              back = COLOR_RED;                 break;
+        case Console::Green:            back = COLOR_GREEN;               break;
+        case Console::Blue:             back = COLOR_BLUE;                break;
+        case Console::Yellow:           back = COLOR_YELLOW;              break;
+        case Console::Cyan:             back = COLOR_CYAN;                break;
+        case Console::Magenta:          back = COLOR_MAGENTA;             break;
+        case Console::Grey:             back = COLOR_BLACK;               break;
+        case Console::BrightRed:        back = is_bright | COLOR_RED;     break;
+        case Console::BrightGreen:      back = is_bright | COLOR_GREEN;   break;
+        case Console::BrightBlue:       back = is_bright | COLOR_BLUE;    break;
+        case Console::BrightYellow:     back = is_bright | COLOR_YELLOW;  break;
+        case Console::BrightCyan:       back = is_bright | COLOR_CYAN;    break;
+        case Console::BrightMagenta:    back = is_bright | COLOR_MAGENTA; break;
+        case Console::White:            back = is_bright | COLOR_WHITE;   break;
+        default:;
+    };
+
+    int bbb, fff;
+
+    bbb = (color_mask & back) << color_len;
+    fff = color_mask & fore;
+    colour |= bbb | fff;
+
+    assert(OK == (init_pair(colour, color_mask & fore, color_mask & back)));
+
+    colour <<= NCURSES_ATTR_SHIFT;
+
+    if (is_bright & fore)
+	    colour |= A_BOLD;
+    if (is_bright & back)
+	    colour |= A_BLINK;
+
+    return colour;
+}
+#endif
 
 
 
@@ -68,8 +210,6 @@ WORD convertConsoleColour( Console::Colour foreground, Console::Colour backgroun
 
 
 
-const int CONSOLE_SIZE_X = 80;
-const int CONSOLE_SIZE_Y = 40;
 
 
 
@@ -140,6 +280,13 @@ void Console::clearScreen(void)
 {
 	memset(m_data->back_buffer, 0, sizeof(CHAR_INFO)*CONSOLE_SIZE_X*CONSOLE_SIZE_Y);
 }
+
+void Console::cleanup(void)
+{
+#if defined(IS_UNIX)
+	endwin();
+#endif
+}
 void Console::draw(int nX, int nY, char chr, Colour fore, Colour back)
 {
     if((nX < 0) || (nX >= CONSOLE_SIZE_X))
@@ -184,6 +331,8 @@ void Console::updateScreen(void)
         dest,
         &rect
         );
+
+	wrefresh(m_data->hFrontBuffer);
 
 	//Sleep(50);
 }

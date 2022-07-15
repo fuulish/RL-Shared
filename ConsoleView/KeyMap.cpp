@@ -3,7 +3,11 @@
 #include <fstream>
 #include <algorithm>
 #include <exception>
-#if defined(IS_WINDOWS)
+#include "Include/system.hpp"
+#if defined(IS_UNIX)
+#include <curses.h>
+#define KEY_ENTER 10
+#elif defined(IS_WINDOWS)
 #define KEY_UP    72
 #define KEY_DOWN  80
 #define KEY_LEFT  75
@@ -49,15 +53,16 @@ void KeyMap::setFunction( const KeyPress& key, const std::string& function, cons
 namespace 
 {
 	const KeyCode Esc(27, false );
-	const KeyCode Enter( 13, false );
-	const KeyCode Up( 72, true );
+	const KeyCode Enter( KEY_ENTER, false );
+	const KeyCode Up( KEY_UP, true );
+	const KeyCode Left( KEY_LEFT, true );
+	const KeyCode Down( KEY_DOWN, true );
+	const KeyCode Right( KEY_RIGHT, true );
 	const KeyCode UpAndLeft( 71, true );
-	const KeyCode Left( 75, true );
 	const KeyCode DownAndLeft( 79, true );
-	const KeyCode Down( 80, true );
 	const KeyCode DownAndRight( 81, true );
-	const KeyCode Right( 77, true );
 	const KeyCode UpAndRight( 73, true );
+
 	const KeyCode BackSpace( 8, false );
 	const KeyCode Space( ' ', false );
 

@@ -6,6 +6,37 @@
 #include <utility>
 #include "Abstract/AOutputWindow.hpp"
 
+#include "Include/system.hpp"
+#if defined(IS_UNIX)
+#include <curses.h>
+typedef struct  {
+	struct {
+		char UnicodeChar; // not to be used at this moment
+		char AsciiChar;
+	} Char;
+	chtype Attributes;
+} CHAR_INFO;
+
+typedef struct {
+	int X;
+	int Y;
+} COORD;
+
+typedef struct {
+	int Top;
+	int Bottom;
+	int Left;
+	int Right;
+} SMALL_RECT;
+
+typedef WINDOW * HANDLE;
+
+void WriteConsoleOutput(WINDOW *, CHAR_INFO *, COORD, COORD, SMALL_RECT&) ;
+void Sleep(int ms) ;
+
+#define  _getch()  wgetch(m_data->hFrontBuffer)
+#endif
+
 
 namespace RL_shared
 {
@@ -42,6 +73,7 @@ public:
     Console(void);
 
     void clearScreen(void);
+    void cleanup(void);
     void draw(int nX, int nY, char chr, Colour forecol, Colour backcol = Black);
     void drawText(int nX, int nY, const char* text, Colour forecol, Colour backcol = Black);
     void updateScreen(void);
