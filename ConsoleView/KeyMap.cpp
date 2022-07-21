@@ -113,6 +113,71 @@ void KeyMap::readFromFile( const boost::filesystem::path& path )
 
 
 
+KeyMapFile::KeyMapFile()
+{
+	std::map<const char *, const char> keys = {
+		{ "Up", 'k' },
+		{ "UpAndLeft", 'y' },
+		{ "Left", 'h' },
+		{ "DownAndLeft", 'b' },
+		{ "Down", 'j' },
+		{ "DownAndRight", 'n' },
+		{ "Right", 'l' },
+		{ "UpAndRight", 'u' },
+		{ "ScrollUp", '-' },
+		{ "ScrollDown", '+' },
+		{ "ScrollDown", '=' },
+		{ "Help", '?' },
+		{ "Look", '/' },
+		{ "Save", 'S' },
+		{ "Char", 'c' },
+		{ "Buy", '$' },
+		{ "Wait", '.' },
+		{ "FloorUp", '>' },
+		{ "FloorDown", '<' },
+		{ "Strafe", 'z' },
+		{ "StrafeLock", 'Z' },
+		{ "Turn", 'x' },
+		{ "TurnLock", 'X' },
+		{ "Get", ',' },
+		{ "Armour", 'a' },
+		{ "Sidearm", 's' },
+		{ "Primary", 'p' },
+		{ "Reload", 'o' },
+		{ "Drop", 'd' },
+		{ "Fire", 'f' },
+		{ "Frag", 'r' },
+		{ "Stun", 't' },
+		{ "Inc", 'i' },
+		{ "Krak", 'g' },
+		{ "Medkit", 'm' },
+		{ "Neutraliser", 'v' },
+		{ "Demolition", 'e' },
+	};
+
+	auto it = keys.begin();
+	while ( it != keys.end() ) {
+		setFunction(KeyCode(it->second, false), std::string(it->first),	std::string(1, it->second));
+		it++;
+	}
+
+	std::map<const char *, const char *> special_keys = {
+		{ "OK", "Enter" },
+		{ "Back", "Esc" },
+		{ "Operate", "Space" },
+	};
+
+	auto it_special = special_keys.begin();
+	while (it_special != special_keys.end()) {
+		std::map< std::string, KeyCode >::const_iterator look( specials.find( it_special->second ) );
+		if (specials.end() != look)
+		{
+			setFunction( look->second, std::string(it_special->first), std::string(it_special->second));
+		}
+
+		it_special++;
+	}
+}
 
 
 KeyMapFile::KeyMapFile( const boost::filesystem::path& filename )

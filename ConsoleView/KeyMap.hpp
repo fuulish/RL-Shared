@@ -46,6 +46,7 @@ class KeyMapFile : public KeyMap
 public:
 
 	explicit KeyMapFile( const boost::filesystem::path& );
+	explicit KeyMapFile();
 	~KeyMapFile();
 
 private:
