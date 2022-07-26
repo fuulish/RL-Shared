@@ -155,7 +155,7 @@ int convertConsoleColour( Console::Colour foreground, Console::Colour background
         case Console::Yellow:           fore = COLOR_YELLOW;              break;
         case Console::Cyan:             fore = COLOR_CYAN;                break;
         case Console::Magenta:          fore = COLOR_MAGENTA;             break;
-        case Console::Grey:             fore = COLOR_BLACK;               break;
+        case Console::Grey:             fore = COLOR_WHITE;               break;
         case Console::BrightRed:        fore = is_bright | COLOR_RED;     break;
         case Console::BrightGreen:      fore = is_bright | COLOR_GREEN;   break;
         case Console::BrightBlue:       fore = is_bright | COLOR_BLUE;    break;
@@ -197,6 +197,10 @@ int convertConsoleColour( Console::Colour foreground, Console::Colour background
 
     if (is_bright & fore)
 	    colour |= A_BOLD;
+
+    if (foreground == Console::Grey)
+	    colour |= A_DIM;
+
     if (is_bright & back)
 	    colour |= A_BLINK;
 
