@@ -8,11 +8,12 @@
 #include <curses.h>
 #define KEY_ENTER 10
 #elif defined(IS_WINDOWS)
-#define KEY_UP    72
-#define KEY_DOWN  80
-#define KEY_LEFT  75
-#define KEY_RIGHT 77
-#define KEY_ENTER 13
+#define KEY_UP        72
+#define KEY_DOWN      80
+#define KEY_LEFT      75
+#define KEY_RIGHT     77
+#define KEY_ENTER     13
+#define KEY_BACKSPACE  8
 #endif
 
 
@@ -63,7 +64,7 @@ namespace
 	const KeyCode DownAndRight( 81, true );
 	const KeyCode UpAndRight( 73, true );
 
-	const KeyCode BackSpace( 8, false );
+	const KeyCode BackSpace( KEY_BACKSPACE, false );
 	const KeyCode Space( ' ', false );
 
 	std::map< std::string, KeyCode > specials = 
