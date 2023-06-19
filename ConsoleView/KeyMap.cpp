@@ -6,6 +6,9 @@
 #include "Include/system.hpp"
 #if defined(IS_UNIX)
 #include <curses.h>
+#ifdef KEY_ENTER
+#undef KEY_ENTER
+#endif
 #define KEY_ENTER 10
 #elif defined(IS_WINDOWS)
 #define KEY_UP        72
